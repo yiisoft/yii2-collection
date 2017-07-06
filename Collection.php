@@ -8,6 +8,9 @@
 
 namespace yii\modelcollection;
 
+use ArrayAccess;
+use Countable;
+use Iterator;
 use yii\base\Arrayable;
 use yii\base\Component;
 use yii\base\InvalidCallException;
@@ -28,27 +31,34 @@ use yii\helpers\Json;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
  */
-class Collection extends Component implements \ArrayAccess, \Iterator
+class Collection extends Component implements ArrayAccess, Iterator, Countable
 {
-    // TODO implement iterator and array access
-
     /**
-     * @var array|BaseActiveRecord[]|ActiveRecordInterface[]|Arrayable[]
-     */
-    private $_models;
-    private $_config;
-
-    /**
-     * @var ActiveQuery
+     * @var ActiveQuery|null the query that returned this collection.
+     * May be`null` if the collection has not been created by a query.
      */
     public $query;
+
+    /**
+     * @var array|BaseActiveRecord[]|ActiveRecordInterface[]|Arrayable[] models contained in this collection.
+     */
+    private $_models;
+    /**
+     * @var array
+     */
+    private $_config;
+
 
     public function __construct($models, $config = [])
     {
         $this->_models = $models;
+        $this->_config = $config;
         parent::__construct($config);
     }
 
+    /**
+     * Lazy evaluation of models, if this collection has been created from a query.
+     */
     private function ensureModels()
     {
         if ($this->_models === null) {
@@ -79,24 +89,112 @@ class Collection extends Component implements \ArrayAccess, \Iterator
 
     // basic collection operations
 
+    /**
+     * Returns all models of the collection.
+     * @return array|\yii\base\Arrayable[]|\yii\db\ActiveRecordInterface[]|\yii\db\BaseActiveRecord[]
+     */
+    public function getModels()
+    {
+        $this->ensureModels();
+        return $this->_models;
+    }
 
+    /**
+     * Apply callback to all items in the collection.
+     * @param callable $callable the callback function to apply. Signature: `function($model)`.
+     * @return static a collection with items returned from the callback.
+     */
     public function map($callable)
     {
         $this->ensureModels();
         return new static(array_map($callable, $this->_models), $this->_config);
     }
 
+    /**
+     * Filter items from the collection.
+     * @param callable $callable the callback function to decide which items to remove. Signature: `function($model, $key)`.
+     * Should return `true` to keep an item and return `false` to remove them.
+     * @return static a collection containing the filtered items.
+     */
     public function filter($callable)
     {
         $this->ensureModels();
         return new static(array_filter($this->_models, $callable, ARRAY_FILTER_USE_BOTH), $this->_config);
     }
 
+    /**
+     * Apply reduce operation to items from the collection.
+     * @param callable $callable the callback function to compute the reduce value. Signature: `function($carry, $model)`.
+     * @param mixed $initialValue initial value to pass to the callback on first item.
+     * @return mixed the result of the reduce operation.
+     */
     public function reduce($callable, $initialValue = null)
     {
         $this->ensureModels();
         return array_reduce($this->_models, $callable, $initialValue);
     }
+
+    /**
+     * Calculate the sum of a field of the models in the collection
+     * @param string|\Closure|array $field the name of the field to calculate.
+     * This will be passed to [[ArrayHelper::getValue()]].
+     * @return mixed the calculated sum.
+     */
+    public function sum($field)
+    {
+        return $this->reduce(function($carry, $model) use ($field) {
+            return $carry + ArrayHelper::getValue($model, $field, 0);
+        }, 0);
+    }
+
+    /**
+     * Calculate the maximum value of a field of the models in the collection
+     * @param string|\Closure|array $field the name of the field to calculate.
+     * This will be passed to [[ArrayHelper::getValue()]].
+     * @return mixed the calculated maximum value. 0 if the collection is empty.
+     */
+    public function max($field)
+    {
+        return $this->reduce(function($carry, $model) use ($field) {
+            $value = ArrayHelper::getValue($model, $field, 0);
+            if ($carry === null) {
+                return $value;
+            } else {
+                return $value > $carry ? $value : $carry;
+            }
+        });
+    }
+
+    /**
+     * Calculate the minimum value of a field of the models in the collection
+     * @param string|\Closure|array $field the name of the field to calculate.
+     * This will be passed to [[ArrayHelper::getValue()]].
+     * @return mixed the calculated minimum value. 0 if the collection is empty.
+     */
+    public function min($field)
+    {
+        return $this->reduce(function($carry, $model) use ($field) {
+            $value = ArrayHelper::getValue($model, $field, 0);
+            if ($carry === null) {
+                return $value;
+            } else {
+                return $value < $carry ? $value : $carry;
+            }
+        });
+    }
+
+    /**
+     * Count items in this collection.
+     * @return int the count of items in this collection.
+     */
+    public function count()
+    {
+        $this->ensureModels();
+        return count($this->_models);
+    }
+
+
+
 
     public function sort($field)
     {
@@ -121,42 +219,6 @@ class Collection extends Component implements \ArrayAccess, \Iterator
         return new static(ArrayHelper::map($this->_models, $from, $to, $group));
     }
 
-    public function sum($field)
-    {
-        return $this->reduce(function($carry, $model) use ($field) {
-            return $carry + ArrayHelper::getValue($model, $field, 0);
-        }, 0);
-    }
-
-    public function max($field)
-    {
-        return $this->reduce(function($carry, $model) use ($field) {
-            $value = ArrayHelper::getValue($model, $field, 0);
-            if ($carry === null) {
-                return $value;
-            } else {
-                return $value > $carry ? $value : $carry;
-            }
-        });
-    }
-
-    public function min($field)
-    {
-        return $this->reduce(function($carry, $model) use ($field) {
-            $value = ArrayHelper::getValue($model, $field, 0);
-            if ($carry === null) {
-                return $value;
-            } else {
-                return $value < $carry ? $value : $carry;
-            }
-        });
-    }
-
-    public function count()
-    {
-        $this->ensureModels();
-        return count($this->_models);
-    }
 
     // AR specific stuff
 

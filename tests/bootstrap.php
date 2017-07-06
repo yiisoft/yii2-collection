@@ -11,14 +11,3 @@ require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 Yii::setAlias('@yiiunit/extensions/modelcollection', __DIR__);
 Yii::setAlias('@yii/modelcollection', dirname(__DIR__));
-
-if (!class_exists('yiiunit\TestCase')) {
-    if (is_file(__DIR__ . '/../../../tests/TestCase.php')) {
-        require_once(__DIR__ . '/../../../tests/TestCase.php');
-    } elseif (is_file(__DIR__ . '/BaseTestCase.php')) {
-        require_once(__DIR__ . '/BaseTestCase.php');
-    } else {
-        file_put_contents(__DIR__ . '/BaseTestCase.php', file_get_contents('https://raw.githubusercontent.com/yiisoft/yii2/master/tests/TestCase.php'));
-        require_once(__DIR__ . '/BaseTestCase.php');
-    }
-}

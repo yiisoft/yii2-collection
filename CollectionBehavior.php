@@ -20,6 +20,11 @@ use yii\db\ActiveQueryInterface;
  */
 class CollectionBehavior extends Behavior
 {
+    // TODO allow extension
+    // https://github.com/yiisoft/yii2/issues/10806#issuecomment-242117369
+    // https://github.com/yiisoft/yii2/issues/10806#issuecomment-242150877
+
+
     public function attach($owner)
     {
         if (!$owner instanceof ActiveQueryInterface) {
@@ -30,7 +35,7 @@ class CollectionBehavior extends Behavior
 
     public function collect()
     {
-        return new Collection(null, ['query' => $this->owner]);
+        return new ModelCollection(null, ['query' => $this->owner]);
     }
 
     public function batchCollect()

@@ -2,11 +2,30 @@
 
 namespace yiiunit\extensions\modelcollection;
 
+use yii\db\Connection;
 use yii\helpers\ArrayHelper;
 use Yii;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    protected function setUp()
+    {
+        $this->mockApplication([
+            'components' => [
+                'db' => [
+                    'class' => Connection::class,
+                    'dsn' => 'sqlite::memory:',
+                ],
+            ],
+        ]);
+        \Yii::$app->db->createCommand()->createTable('customers', [
+            'id' => 'pk',
+            'name' => 'string NOT NULL',
+            'age' => 'integer NOT NULL',
+        ])->execute();
+        parent::setUp();
+    }
+
     /**
      * Clean up after test.
      * By default the application created with [[mockApplication]] will be destroyed.

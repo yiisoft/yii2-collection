@@ -8,8 +8,32 @@ use yii\db\Connection;
 use yii\modelcollection\Collection;
 use yiiunit\extensions\modelcollection\models\Customer;
 
-class CollectionTest extends TestCase
+class ModelCollectionTest extends TestCase
 {
+    protected function setUp()
+    {
+        $this->mockApplication([
+            'components' => [
+                'db' => [
+                    'class' => Connection::class,
+                    'dsn' => 'sqlite::memory:',
+                ],
+            ],
+        ]);
+        \Yii::$app->db->createCommand()->createTable('customers', [
+            'id' => 'pk',
+            'name' => 'string NOT NULL',
+            'age' => 'integer NOT NULL',
+        ])->execute();
+        parent::setUp();
+    }
+
+    public function testCollect()
+    {
+        $this->assertInstanceOf(Collection::class, Customer::find()->collect());
+        $this->assertInstanceOf(ActiveQuery::class, Customer::find()->collect()->query);
+    }
+
     public function testIterator()
     {
         $models = [
@@ -70,23 +94,6 @@ class CollectionTest extends TestCase
         $collection = new Collection($models);
         $this->assertEquals(3, count($collection));
         $this->assertEquals(3, $collection->count());
-    }
-
-    public function testIsEmpty()
-    {
-        $collection = new Collection([]);
-        $this->assertTrue($collection->isEmpty());
-
-        $models = [
-            new Customer(['id' => 1]),
-            new Customer(['id' => 2]),
-            new Customer(['id' => 3]),
-        ];
-        $collection->setData($models);
-        $this->assertFalse($collection->isEmpty());
-
-        $collection = new Collection($models);
-        $this->assertFalse($collection->isEmpty());
     }
 
     public function testMap()
@@ -198,85 +205,5 @@ class CollectionTest extends TestCase
         $this->assertEquals(42, $collection->max('age'));
     }
 
-    public function testKeys()
-    {
-        $data = [
-            'a',
-            'b' => 'c',
-            1 => 'test',
-        ];
-        $collection = new Collection($data);
-        $this->assertSame([0, 'b', 1], $collection->keys()->getData());
-    }
-
-    public function testValues()
-    {
-        $data = [
-            'a',
-            'b' => 'c',
-            1 => 'test',
-        ];
-        $collection = new Collection($data);
-        $this->assertSame(['a', 'c', 'test'], $collection->values()->getData());
-    }
-
-    public function testFlip()
-    {
-        $data = [
-            'a',
-            'b' => 'c',
-            1 => 'test',
-        ];
-        $collection = new Collection($data);
-        $this->assertSame(['a' => 0, 'c' => 'b', 'test' => 1], $collection->flip()->getData());
-    }
-
-    public function testReverse()
-    {
-        $data = [
-            'a',
-            'b' => 'c',
-            1 => 'test',
-        ];
-        $collection = new Collection($data);
-        $this->assertSame([1 => 'test', 'b' => 'c', 0 => 'a'], $collection->reverse()->getData());
-    }
-
-    public function testMerge()
-    {
-        $data1 = ['a', 'b', 'c'];
-        $data2 = [1, 2, 3];
-        $collection1 = new Collection($data1);
-        $collection2 = new Collection($data2);
-        $this->assertEquals(['a', 'b', 'c', 1, 2, 3], $collection1->merge($collection2)->getData());
-        $this->assertEquals([1, 2, 3, 'a', 'b', 'c'], $collection2->merge($collection1)->getData());
-        $this->assertEquals(['a', 'b', 'c', 1, 2, 3], $collection1->merge($data2)->getData());
-        $this->assertEquals([1, 2, 3, 'a', 'b', 'c'], $collection2->merge($data1)->getData());
-    }
-
-    /**
-     * @expectedException \yii\base\InvalidParamException
-     */
-    public function testMergeWrongType()
-    {
-        $data1 = ['a', 'b', 'c'];
-        $collection1 = new Collection($data1);
-        $collection1->merge('string');
-    }
-
-    public function testConvert()
-    {
-        $models = [
-            new Customer(['id' => 1, 'age' => -2]),
-            new Customer(['id' => 2, 'age' => 2]),
-            new Customer(['id' => 3, 'age' => 42]),
-        ];
-        $collection = new Collection($models);
-        $this->assertEquals([1 => -2, 2 => 2, 3 => 42], $collection->convert('id', 'age')->getData());
-        $this->assertEquals(['1-2' => -1, '22' => 4, '342' => 45], $collection->convert(
-            function($model) { return $model->id . $model->age; },
-            function($model) { return $model->id + $model->age; }
-        )->getData());
-    }
 
 }

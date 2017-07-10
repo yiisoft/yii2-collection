@@ -9,6 +9,7 @@
 namespace yii\modelcollection;
 
 use ArrayAccess;
+use Closure;
 use Countable;
 use Iterator;
 use yii\base\Component;
@@ -16,11 +17,32 @@ use yii\base\InvalidCallException;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 
-// TODO take a look at https://github.com/nikic/iter
-// TODO take a look at https://github.com/Athari/YaLinqo
-
 /**
- * Class Collection
+ * Collection is a container for a set of items.
+ *
+ * It provides methods for transforming and filtering the items as well as sorting methods, which can be applied
+ * using a chained interface. All these operations will return a new collection containing the modified data
+ * keeping the original collection as it was as long as containing objects state is not changed.
+ *
+ * ```php
+ * $collection = new Collection([1, 2, 3]);
+ * echo $collection->map(function($i) { // [2, 3, 4]
+ *     return $i + 1;
+ * })->filter(function($i) { // [2, 3]
+ *     return $i < 4;
+ * })->sum(); // 5
+ * ```
+ *
+ * The collection implements [[ArrayAccess]], [[Iterator]], and [[Countable]], so you can access it in
+ * the same way you use a PHP array. A collection however is read-only, you can not manipulate single items.
+ *
+ * ```php
+ * $collection = new Collection([1, 2, 3]);
+ * echo $collection[1]; // 2
+ * foreach($collection as $item) {
+ *     echo $item . ' ';
+ * } // will print 1 2 3
+ * ```
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
@@ -50,15 +72,6 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     public function getData()
     {
         return $this->_data;
-    }
-
-    /**
-     * Set the data contained in this collection.
-     * @param array $data array of items to set as collection data.
-     */
-    public function setData(array $data)
-    {
-        $this->_data = $data;
     }
 
     /**
@@ -143,7 +156,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
 
     /**
      * Calculate the sum of a field of the models in the collection.
-     * @param string|\Closure|array $field the name of the field to calculate.
+     * @param string|Closure|array $field the name of the field to calculate.
      * This will be passed to [[ArrayHelper::getValue()]].
      * @return mixed the calculated sum.
      */
@@ -156,7 +169,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
 
     /**
      * Calculate the maximum value of a field of the models in the collection
-     * @param string|\Closure|array $field the name of the field to calculate.
+     * @param string|Closure|array $field the name of the field to calculate.
      * This will be passed to [[ArrayHelper::getValue()]].
      * @return mixed the calculated maximum value. 0 if the collection is empty.
      */
@@ -174,7 +187,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
 
     /**
      * Calculate the minimum value of a field of the models in the collection
-     * @param string|\Closure|array $field the name of the field to calculate.
+     * @param string|Closure|array $field the name of the field to calculate.
      * This will be passed to [[ArrayHelper::getValue()]].
      * @return mixed the calculated minimum value. 0 if the collection is empty.
      */
@@ -277,7 +290,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * This method uses [[ArrayHelper::multisort()]] on the collection data.
      *
      * The original collection will not be changed, a new collection with sorted data is returned.
-     * @param string|\Closure|array $key the key(s) to be sorted by. This refers to a key name of the sub-array
+     * @param string|Closure|array $key the key(s) to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison
      * purpose. The anonymous function signature should be: `function($item)`.
      * To sort by multiple keys, provide an array of keys here.
@@ -356,55 +369,136 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         throw new InvalidParamException('Collection can only be merged with an array or other collections.');
     }
 
-    public function convert($from, $to)
+    /**
+     * Convert collection data by selecting a new key and a new value for each item.
+     *
+     * Builds a map (key-value pairs) from a multidimensional array or an array of objects.
+     * The `$from` and `$to` parameters specify the key names or property names to set up the map.
+     *
+     * The original collection will not be changed, a new collection with newly mapped data is returned.
+     * @param string|Closure $from the field of the item to use as the key of the created map.
+     * This can be a closure that returns such a value.
+     * @param string|Closure $to the field of the item to use as the value of the created map.
+     * This can be a closure that returns such a value.
+     * @return static a new collection containing the mapped data.
+     * @see ArrayHelper::map()
+     */
+    public function remap($from, $to)
     {
         return new static(ArrayHelper::map($this->getData(), $from, $to));
     }
 
+    /**
+     * Assign a new key to each item in the collection.
+     *
+     * The original collection will not be changed, a new collection with newly mapped data is returned.
+     * @param string|Closure $key the field of the item to use as the new key.
+     * This can be a closure that returns such a value.
+     * @return static a new collection containing the newly index data.
+     * @see ArrayHelper::map()
+     */
     public function indexBy($key)
     {
-        return $this->convert($key, function ($model) { return $model; });
+        return $this->remap($key, function ($model) { return $model; });
     }
 
-    public function groupBy()
+    /**
+     * Group items by a specified value.
+     *
+     * The original collection will not be changed, a new collection with grouped data is returned.
+     * @param string|Closure $groupField the field of the item to use as the group value.
+     * This can be a closure that returns such a value.
+     * @param bool $preserveKeys whether to preserve item keys in the groups. Defaults to `true`.
+     * @return static a new collection containing the grouped data.
+     * @see ArrayHelper::map()
+     */
+    public function groupBy($groupField, $preserveKeys = true)
     {
-
+        $result = [];
+        if ($preserveKeys) {
+            foreach ($this->getData() as $key => $element) {
+                $result[ArrayHelper::getValue($element, $groupField)][$key] = $element;
+            }
+        } else {
+            foreach ($this->getData() as $key => $element) {
+                $result[ArrayHelper::getValue($element, $groupField)][] = $element;
+            }
+        }
+        return new static($result);
     }
 
-    // TODO could return the count of items
-    // TODO could take a closure to check
+    /**
+     * Check whether the collection contains a specific item.
+     * @param mixed|Closure $item the item to search for. You may also pass a closure that returns a boolean.
+     * The closure will be called on each item and in case it returns `true`, the item will be considered to
+     * be found. In case a closure is passed, `$strict` parameter has no effect.
+     * @param bool $strict whether comparison should be compared strict (`===`) or not (`==`).
+     * Defaults to `false`.
+     * @return bool `true` if the collection contains at least one item that matches, `false` if not.
+     */
     public function contains($item, $strict = false)
     {
-        foreach($this->getData() as $i) {
-            if ($strict ? $i === $item : $i == $item) {
-                return true;
+        if ($item instanceof Closure) {
+            foreach($this->getData() as $i) {
+                if ($item($i)) {
+                    return true;
+                }
+            }
+        } else {
+            foreach($this->getData() as $i) {
+                if ($strict ? $i === $item : $i == $item) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    /**
+     * Remove a specific item from the collection.
+     *
+     * The original collection will not be changed, a new collection with modified data is returned.
+     * @param mixed|Closure $item the item to search for. You may also pass a closure that returns a boolean.
+     * The closure will be called on each item and in case it returns `true`, the item will be removed.
+     * In case a closure is passed, `$strict` parameter has no effect.
+     * @param bool $strict whether comparison should be compared strict (`===`) or not (`==`).
+     * Defaults to `false`.
+     * @return static a new collection containing the filtered items.
+     * @see filter()
+     */
     public function remove($item, $strict = false)
     {
-        $data = $this->getData();
-        foreach($data as $k => $i) {
-            if ($strict ? $i === $item : $i == $item) {
-                unset($data[$k]);
-            }
+        if ($item instanceof Closure) {
+            $fun = function($i) use ($item) { return !$item($i); };
+        } elseif ($strict) {
+            $fun = function($i) use ($item) { return $i !== $item; };
+        } else {
+            $fun = function($i) use ($item) { return $i != $item; };
         }
-        return new static($data);
+        return $this->filter($fun);
     }
 
+    /**
+     * Replace a specific item in the collection with another one.
+     *
+     * The original collection will not be changed, a new collection with modified data is returned.
+     * @param mixed $item the item to search for.
+     * @param mixed $replacement the replacement to insert instead of the item.
+     * @param bool $strict whether comparison should be compared strict (`===`) or not (`==`).
+     * Defaults to `false`.
+     * @return static a new collection containing the new set of items.
+     * @see map()
+     */
     public function replace($item, $replacement, $strict = false)
     {
-        $data = $this->getData();
-        foreach($data as $k => $i) {
+        return $this->map(function($i) use ($item, $replacement, $strict) {
             if ($strict ? $i === $item : $i == $item) {
-                $data[$k] = $replacement;
+                return $replacement;
+            } else {
+                return $i;
             }
-        }
-        return new static($data);
+        });
     }
-
 
     // ArrayAccess methods
 

@@ -3,21 +3,24 @@
 namespace yiiunit\extensions\modelcollection;
 
 
-use yii\db\ActiveQuery;
-use yii\db\Connection;
+use yii\base\InvalidCallException;
 use yii\modelcollection\Collection;
 use yiiunit\extensions\modelcollection\models\Customer;
 
 class CollectionTest extends TestCase
 {
-    public function testIterator()
+    protected function getIteratorModels()
     {
-        $models = [
+        return [
             new Customer(['id' => 1]),
             new Customer(['id' => 2]),
             new Customer(['id' => 3]),
         ];
-        $collection = new Collection($models);
+    }
+
+    public function testIterator()
+    {
+        $collection = new Collection($this->getIteratorModels());
         $it = 0;
         foreach ($collection as $model) {
             $this->assertInstanceOf(Customer::class, $model);
@@ -25,6 +28,52 @@ class CollectionTest extends TestCase
             ++$it;
         }
         $this->assertEquals(3, $it);
+
+        $collection = new Collection($this->getIteratorModels());
+        $it = 0;
+        foreach ($collection as $key => $model) {
+            $this->assertInstanceOf(Customer::class, $model);
+            $this->assertEquals($it, $key);
+            $this->assertEquals($it + 1, $model->id);
+            ++$it;
+        }
+        $this->assertEquals(3, $it);
+    }
+
+    public function testIteratorCurrent()
+    {
+        $models = $this->getIteratorModels();
+        $collection = new Collection($models);
+        $this->assertSame($models[0], $collection->current());
+    }
+
+    public function testIteratorKey()
+    {
+        $models = $this->getIteratorModels();
+        $collection = new Collection($models);
+        $this->assertSame(0, $collection->key());
+    }
+
+    public function testIteratorNext()
+    {
+        $models = $this->getIteratorModels();
+        $collection = new Collection($models);
+        $collection->next();
+        $this->assertSame($models[1], $collection->current());
+        $collection->next();
+        $this->assertSame($models[2], $collection->current());
+        $collection->next();
+        $this->assertFalse($collection->current());
+    }
+
+    public function testIteratorValid()
+    {
+        $collection = new Collection([]);
+        $this->assertFalse($collection->valid());
+
+        $models = $this->getIteratorModels();
+        $collection = new Collection($models);
+        $this->assertTrue($collection->valid());
     }
 
     public function testArrayAccessRead()
@@ -35,12 +84,16 @@ class CollectionTest extends TestCase
             new Customer(['id' => 3]),
         ];
         $collection = new Collection($models);
+        $this->assertTrue(isset($collection[0]));
         $this->assertInstanceOf(Customer::class, $collection[0]);
         $this->assertEquals(1, $collection[0]->id);
+        $this->assertTrue(isset($collection[1]));
         $this->assertInstanceOf(Customer::class, $collection[1]);
         $this->assertEquals(2, $collection[1]->id);
+        $this->assertTrue(isset($collection[2]));
         $this->assertInstanceOf(Customer::class, $collection[2]);
         $this->assertEquals(3, $collection[2]->id);
+        $this->assertFalse(isset($collection[3]));
 
         $models = [
             'one' => new Customer(['id' => 1]),
@@ -48,12 +101,58 @@ class CollectionTest extends TestCase
             'three' => new Customer(['id' => 3]),
         ];
         $collection = new Collection($models);
+        $this->assertTrue(isset($collection['one']));
         $this->assertInstanceOf(Customer::class, $collection['one']);
         $this->assertEquals(1, $collection['one']->id);
+        $this->assertTrue(isset($collection['two']));
         $this->assertInstanceOf(Customer::class, $collection['two']);
         $this->assertEquals(2, $collection['two']->id);
+        $this->assertTrue(isset($collection['three']));
         $this->assertInstanceOf(Customer::class, $collection['three']);
         $this->assertEquals(3, $collection['three']->id);
+        $this->assertFalse(isset($collection['four']));
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidCallException
+     */
+    public function testArrayAccessWrite()
+    {
+        $models = [
+            'one' => new Customer(['id' => 1]),
+            'two' => new Customer(['id' => 2]),
+            'three' => new Customer(['id' => 3]),
+        ];
+        $collection = new Collection($models);
+        $collection['three'] = 'test';
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidCallException
+     */
+    public function testArrayAccessWrite2()
+    {
+        $models = [
+            'one' => new Customer(['id' => 1]),
+            'two' => new Customer(['id' => 2]),
+            'three' => new Customer(['id' => 3]),
+        ];
+        $collection = new Collection($models);
+        $collection[] = 'test';
+    }
+
+    /**
+     * @expectedException \yii\base\InvalidCallException
+     */
+    public function testArrayAccessUnset()
+    {
+        $models = [
+            'one' => new Customer(['id' => 1]),
+            'two' => new Customer(['id' => 2]),
+            'three' => new Customer(['id' => 3]),
+        ];
+        $collection = new Collection($models);
+        unset($collection['two']);
     }
 
     public function testCountable()
@@ -164,6 +263,9 @@ class CollectionTest extends TestCase
         $collection = new Collection($models);
         $this->assertEquals(6, $collection->sum('id'));
         $this->assertEquals(42, $collection->sum('age'));
+
+        $collection = new Collection([-2, 1, 3]);
+        $this->assertEquals(2, $collection->sum());
     }
 
     public function testMin()
@@ -180,6 +282,9 @@ class CollectionTest extends TestCase
         $collection = new Collection($models);
         $this->assertEquals(1, $collection->min('id'));
         $this->assertEquals(-2, $collection->min('age'));
+
+        $collection = new Collection([-2, 1, 3]);
+        $this->assertEquals(-2, $collection->min());
     }
 
     public function testMax()
@@ -196,6 +301,9 @@ class CollectionTest extends TestCase
         $collection = new Collection($models);
         $this->assertEquals(3, $collection->max('id'));
         $this->assertEquals(42, $collection->max('age'));
+
+        $collection = new Collection([-2, 1, 3]);
+        $this->assertEquals(3, $collection->max());
     }
 
     public function testKeys()
@@ -264,7 +372,7 @@ class CollectionTest extends TestCase
         $collection1->merge('string');
     }
 
-    public function testConvert()
+    public function testReMap()
     {
         $models = [
             new Customer(['id' => 1, 'age' => -2]),
@@ -272,11 +380,140 @@ class CollectionTest extends TestCase
             new Customer(['id' => 3, 'age' => 42]),
         ];
         $collection = new Collection($models);
-        $this->assertEquals([1 => -2, 2 => 2, 3 => 42], $collection->convert('id', 'age')->getData());
-        $this->assertEquals(['1-2' => -1, '22' => 4, '342' => 45], $collection->convert(
+        $this->assertEquals([1 => -2, 2 => 2, 3 => 42], $collection->remap('id', 'age')->getData());
+        $this->assertEquals(['1-2' => -1, '22' => 4, '342' => 45], $collection->remap(
             function($model) { return $model->id . $model->age; },
             function($model) { return $model->id + $model->age; }
         )->getData());
+    }
+
+    public function testIndexBy()
+    {
+        $models = [
+            new Customer(['id' => 1, 'age' => -2]),
+            new Customer(['id' => 2, 'age' => 2]),
+            new Customer(['id' => 3, 'age' => 42]),
+        ];
+        $expected = [
+            1 => $models[0],
+            2 => $models[1],
+            3 => $models[2],
+        ];
+        $collection = new Collection($models);
+        $this->assertEquals($expected, $collection->indexBy('id')->getData());
+    }
+
+    public function testGroupBy()
+    {
+        $models = [
+            1 => new Customer(['id' => 1, 'age' => 2]),
+            2 => new Customer(['id' => 2, 'age' => 2]),
+            3 => new Customer(['id' => 3, 'age' => 42]),
+        ];
+        $expectedByIdWithKeys = [
+            1 => [
+                1 => $models[1],
+            ],
+            2 => [
+                2 => $models[2],
+            ],
+            3 => [
+                3 => $models[3],
+            ],
+        ];
+        $expectedByIdWithoutKeys = [
+            1 => [
+                $models[1],
+            ],
+            2 => [
+                $models[2],
+            ],
+            3 => [
+                $models[3],
+            ],
+        ];
+        $expectedByAgeWithKeys = [
+            2 => [
+                1 => $models[1],
+                2 => $models[2],
+            ],
+            42 => [
+                3 => $models[3],
+            ],
+        ];
+        $expectedByAgeWithoutKeys = [
+            2 => [
+                $models[1],
+                $models[2],
+            ],
+            42 => [
+                $models[3],
+            ],
+        ];
+        $collection = new Collection($models);
+        $this->assertEquals($expectedByIdWithKeys, $collection->groupBy('id')->getData());
+        $this->assertEquals($expectedByIdWithoutKeys, $collection->groupBy('id', false)->getData());
+        $this->assertEquals($expectedByAgeWithKeys, $collection->groupBy('age')->getData());
+        $this->assertEquals($expectedByAgeWithoutKeys, $collection->groupBy('age', false)->getData());
+    }
+
+    public function testContains()
+    {
+        $data = [1, 2, 3, 4, 5, 6];
+        $collection = new Collection($data);
+        $this->assertTrue($collection->contains(1, false));
+        $this->assertTrue($collection->contains('1', false));
+        $this->assertTrue($collection->contains(1, true));
+        $this->assertFalse($collection->contains('1', true));
+
+        $this->assertFalse($collection->contains(8, false));
+        $this->assertFalse($collection->contains('8', false));
+        $this->assertFalse($collection->contains(8, true));
+        $this->assertFalse($collection->contains('8', true));
+
+        $this->assertFalse($collection->contains(function($item) { return $item > 6; }, false));
+        $this->assertTrue($collection->contains(function($item) { return $item > 5; }, false));
+        $this->assertFalse($collection->contains(function($item) { return $item > 6; }, true));
+        $this->assertTrue($collection->contains(function($item) { return $item > 5; }, true));
+    }
+
+    public function testRemove()
+    {
+        $collection = new Collection([1, 2, 3, 4, 5, 6]);
+        $this->assertEquals([1,2,4,5,6], $collection->remove(3, false)->values()->getData());
+        $this->assertEquals([1,2,4,5,6], $collection->remove('3', false)->values()->getData());
+        $this->assertEquals([1,2,4,5,6], $collection->remove(3, true)->values()->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->remove('3', true)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->remove(7, false)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->remove('7', false)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->remove(7, true)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->remove('7', true)->getData());
+
+        $this->assertEquals([1,2,3], $collection->remove(function($i) { return $i > 3; }, false)->getData());
+        $this->assertEquals([1,2,3], $collection->remove(function($i) { return $i > 3; }, true)->getData());
+    }
+
+    public function testReplace()
+    {
+        $collection = new Collection([1, 2, 3, 4, 5, 6]);
+        $this->assertEquals([1,2,9,4,5,6], $collection->replace(3,   9, false)->getData());
+        $this->assertEquals([1,2,9,4,5,6], $collection->replace('3', 9, false)->getData());
+        $this->assertEquals([1,2,9,4,5,6], $collection->replace(3,   9, true)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->replace('3', 9, true)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->replace(7,   9, false)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->replace('7', 9, false)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->replace(7,   9, true)->getData());
+        $this->assertEquals([1,2,3,4,5,6], $collection->replace('7', 9, true)->getData());
+
+        $collection = new Collection([1, 2, 3, 4, 3, 6]);
+        $this->assertEquals([1,2,9,4,9,6], $collection->replace(3,   9, false)->getData());
+        $this->assertEquals([1,2,9,4,9,6], $collection->replace('3', 9, false)->getData());
+        $this->assertEquals([1,2,9,4,9,6], $collection->replace(3,   9, true)->getData());
+        $this->assertEquals([1,2,3,4,3,6], $collection->replace('3', 9, true)->getData());
+        $this->assertEquals([1,2,3,4,3,6], $collection->replace(7,   9, false)->getData());
+        $this->assertEquals([1,2,3,4,3,6], $collection->replace('7', 9, false)->getData());
+        $this->assertEquals([1,2,3,4,3,6], $collection->replace(7,   9, true)->getData());
+        $this->assertEquals([1,2,3,4,3,6], $collection->replace('7', 9, true)->getData());
     }
 
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace yiiunit\extensions\modelcollection\models;
+namespace yiiunit\extensions\collection\models;
 
 use yii\db\ActiveRecord;
-use yii\modelcollection\CollectionBehavior;
+use yii\collection\CollectionBehavior;
 
 /**
  * Customer Model

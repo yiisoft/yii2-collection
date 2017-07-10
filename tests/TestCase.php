@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\modelcollection;
+namespace yiiunit\extensions\collection;
 
 use yii\db\Connection;
 use yii\helpers\ArrayHelper;

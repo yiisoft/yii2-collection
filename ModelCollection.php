@@ -1,6 +1,6 @@
 <?php
 
-namespace yii\modelcollection;
+namespace yii\collection;
 
 
 use yii\base\Arrayable;
@@ -9,6 +9,9 @@ use yii\db\ActiveQuery;
 use yii\db\ActiveRecordInterface;
 use yii\db\BaseActiveRecord;
 
+/**
+ * Class ModelCollection
+ */
 class ModelCollection extends Collection
 {
     /**

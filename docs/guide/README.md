@@ -1,5 +1,5 @@
-ActiveRecord Collection Extension for Yii 2
-===========================================
+Collection Extension for Yii 2
+==============================
 
 TBD
 
@@ -9,7 +9,7 @@ Basic Usage:
 Configuration
 -------------
 
-To use this extension, you have to attach the `yii\modelcollection\CollectionBehavior` to the `ActiveQuery` instance of
+To use this extension, you have to attach the `yii\collection\CollectionBehavior` to the `ActiveQuery` instance of
 your `ActiveRecord` classes by overriding the `find()` method:
 
 ```php

@@ -9,5 +9,5 @@ define('YII_DEBUG', true);
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
-Yii::setAlias('@yiiunit/extensions/modelcollection', __DIR__);
-Yii::setAlias('@yii/modelcollection', dirname(__DIR__));
+Yii::setAlias('@yiiunit/extensions/collection', __DIR__);
+Yii::setAlias('@yii/collection', dirname(__DIR__));

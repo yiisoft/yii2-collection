@@ -1,6 +1,5 @@
 /vendor
 /composer.lock
-/tests/BaseTestCase.php
 /tests/data/config.local.php
 /tests/docker
 /tests/dockerids

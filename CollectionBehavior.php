@@ -6,7 +6,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace yii\modelcollection;
+namespace yii\collection;
 
 use yii\base\Behavior;
 use yii\base\InvalidConfigException;

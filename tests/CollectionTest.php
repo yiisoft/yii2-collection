@@ -181,9 +181,6 @@ class CollectionTest extends TestCase
             new Customer(['id' => 2]),
             new Customer(['id' => 3]),
         ];
-        $collection->setData($models);
-        $this->assertFalse($collection->isEmpty());
-
         $collection = new Collection($models);
         $this->assertFalse($collection->isEmpty());
     }
@@ -516,4 +513,66 @@ class CollectionTest extends TestCase
         $this->assertEquals([1,2,3,4,3,6], $collection->replace('7', 9, true)->getData());
     }
 
+    public function testSort()
+    {
+        $data = [4, 6, 5, 8, 11, 1];
+        $collection = new Collection($data);
+        $this->assertEquals([1,4,5,6,8,11], $collection->sort(SORT_ASC, SORT_REGULAR)->values()->getData());
+        $this->assertEquals([1,11,4,5,6,8], $collection->sort(SORT_ASC, SORT_STRING)->values()->getData());
+        $this->assertEquals([11,8,6,5,4,1], $collection->sort(SORT_DESC, SORT_REGULAR)->values()->getData());
+        $this->assertEquals([8,6,5,4,11,1], $collection->sort(SORT_DESC, SORT_STRING)->values()->getData());
+    }
+
+    public function testSortByKey()
+    {
+        $data = [5 => 4, 44 => 55, 55 => 44, 4 => 5];
+        $collection = new Collection($data);
+        $this->assertEquals([4 => 5, 5 => 4, 44 => 55, 55 => 44], $collection->sortByKey(SORT_ASC, SORT_REGULAR)->getData());
+        $this->assertEquals([4 => 5, 44 => 55, 5 => 4, 55 => 44], $collection->sortByKey(SORT_ASC, SORT_STRING)->getData());
+        $this->assertEquals([55 => 44, 44 => 55, 5 => 4, 4 => 5], $collection->sortByKey(SORT_DESC, SORT_REGULAR)->getData());
+        $this->assertEquals([55 => 44, 5 => 4, 44 => 55, 4 => 5], $collection->sortByKey(SORT_DESC, SORT_STRING)->getData());
+    }
+
+    public function testSortNatural()
+    {
+        $data = ['100.', '1.', '11.', '2.'];
+        $collection = new Collection($data);
+        $this->assertEquals(['1.', '2.', '11.', '100.'], $collection->sortNatural(false)->values()->getData());
+        $this->assertEquals(['1.', '2.', '11.', '100.'], $collection->sortNatural(true)->values()->getData());
+
+        $data = ['anti', 'Auto', 'Zett', 'beta'];
+        $collection = new Collection($data);
+        $this->assertEquals(['anti', 'Auto', 'beta', 'Zett'], $collection->sortNatural(false)->values()->getData());
+        $this->assertEquals(['Auto', 'Zett', 'anti', 'beta'], $collection->sortNatural(true)->values()->getData());
+    }
+
+    public function testSortBy()
+    {
+        $models = [
+            2 => new Customer(['id' => 2, 'age' => 42]),
+            1 => new Customer(['id' => 1, 'age' => 2]),
+            3 => new Customer(['id' => 3, 'age' => 2]),
+        ];
+        $collection = new Collection($models);
+        $this->assertSame([
+            $models[1],
+            $models[2],
+            $models[3],
+        ], $collection->sortBy('id')->getData());
+        $this->assertSame([
+            $models[3],
+            $models[2],
+            $models[1],
+        ], $collection->sortBy('id', SORT_DESC)->getData());
+        $this->assertSame([
+            $models[1],
+            $models[3],
+            $models[2],
+        ], $collection->sortBy(['age', 'id'])->getData());
+        $this->assertSame([
+            $models[3],
+            $models[1],
+            $models[2],
+        ], $collection->sortBy(['age', 'id'], [SORT_ASC, SORT_DESC])->getData());
+    }
 }

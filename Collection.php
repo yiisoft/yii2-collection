@@ -289,6 +289,8 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      *
      * This method uses [[ArrayHelper::multisort()]] on the collection data.
      *
+     * Note that keys will not be preserved by this method.
+     *
      * The original collection will not be changed, a new collection with sorted data is returned.
      * @param string|Closure|array $key the key(s) to be sorted by. This refers to a key name of the sub-array
      * elements, a property name of the objects, or an anonymous function returning the values for comparison

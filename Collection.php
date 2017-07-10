@@ -15,6 +15,7 @@ use Iterator;
 use yii\base\Component;
 use yii\base\InvalidCallException;
 use yii\base\InvalidParamException;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -500,6 +501,48 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
                 return $i;
             }
         });
+    }
+
+    /**
+     * Slice the set of elements by an offset and number of items to return.
+     *
+     * The original collection will not be changed, a new collection with the selected data is returned.
+     * @param int $offset starting offset for the slice.
+     * @param int|null $limit the number of elements to return at maximum.
+     * @param bool $preserveKeys whether to preserve item keys.
+     * @return static a new collection containing the new set of items.
+     */
+    public function slice($offset, $limit = null, $preserveKeys = true)
+    {
+        return new static(array_slice($this->getData(), $offset, $limit, $preserveKeys));
+    }
+
+    /**
+     * Apply Pagination to the collection.
+     *
+     * This will return a portion of the data that maps the the page calculated by the pagination object.
+     *
+     * Usage example:
+     *
+     * ```php
+     * $collection = new Collection($data);
+     * $pagination = new Pagination([
+     *     'totalCount' => $collection->count(),
+     *     'pageSize' => 3,
+     * ]);
+     * // the current page will be determined from request parameters
+     * $pageData = $collection->paginate($pagination)->getData());
+     * ```
+     *
+     * The original collection will not be changed, a new collection with the selected data is returned.
+     * @param Pagination $pagination the pagination object to retrieve page information from.
+     * @return static a new collection containing the items for the current page.
+     * @see Pagination
+     */
+    public function paginate(Pagination $pagination, $preserveKeys = false)
+    {
+        $limit = $pagination->getLimit();
+        return $this->slice($pagination->getOffset(), $limit > 0 ? $limit : null, $preserveKeys);
     }
 
     // ArrayAccess methods

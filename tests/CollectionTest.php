@@ -4,6 +4,7 @@ namespace yiiunit\extensions\modelcollection;
 
 
 use yii\base\InvalidCallException;
+use yii\data\Pagination;
 use yii\modelcollection\Collection;
 use yiiunit\extensions\modelcollection\models\Customer;
 
@@ -574,5 +575,37 @@ class CollectionTest extends TestCase
             $models[1],
             $models[2],
         ], $collection->sortBy(['age', 'id'], [SORT_ASC, SORT_DESC])->getData());
+    }
+
+    public function testSlice()
+    {
+        $data = [1,2,3,4,5];
+        $collection = new Collection($data);
+        $this->assertEquals([3=>4,4=>5], $collection->slice(3)->getData());
+        $this->assertEquals([3=>4], $collection->slice(3, 1)->getData());
+        $this->assertEquals([1,2], $collection->slice(0, 2)->getData());
+        $this->assertEquals([1=>2,2=>3], $collection->slice(1, 2)->getData());
+    }
+
+    public function testPaginate()
+    {
+        $data = [1,2,3,4,5];
+        $collection = new Collection($data);
+        $pagination = new Pagination([
+            'totalCount' => $collection->count(),
+            'pageSize' => 3,
+        ]);
+        $pagination->page = 0;
+        $this->assertEquals([1,2,3], $collection->paginate($pagination)->getData());
+        $pagination->page = 1;
+        $this->assertEquals([4,5], $collection->paginate($pagination)->getData());
+
+        $pagination = new Pagination([
+            'totalCount' => $collection->count(),
+            'pageSizeLimit' => false,
+            'pageSize' => -1,
+        ]);
+        $pagination->page = 0;
+        $this->assertEquals([1,2,3,4,5], $collection->paginate($pagination)->getData());
     }
 }

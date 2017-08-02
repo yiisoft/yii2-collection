@@ -1,5 +1,10 @@
-ActiveRecord Collection Extension for Yii 2
-===========================================
+<p align="center">
+    <a href="https://github.com/yiisoft" target="_blank">
+        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
+    </a>
+    <h1 align="center">ActiveRecord Collection Extension for Yii 2</h1>
+    <br>
+</p>
 
 This extension provides a generic data collection as well as a collection for the ActiveRecord DB layer of Yii 2.
 

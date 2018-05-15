@@ -26,7 +26,7 @@ use yii\helpers\Json;
  * GeneratorCollection
  *
  * @author Carsten Brandt <mail@cebe.cc>
- * @since 2.0
+ * @since 1.0
  */
 class GeneratorCollection extends Component implements \Iterator
 {

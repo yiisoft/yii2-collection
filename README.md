@@ -32,7 +32,7 @@ php composer.phar require --prefer-dist yiisoft/yii2-collection
 or add
 
 ```json
-"yiisoft/yii2-collection": "~2.0.0"
+"yiisoft/yii2-collection": "~1.0.0"
 ```
 
 to the require section of your composer.json.

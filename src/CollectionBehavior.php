@@ -15,7 +15,7 @@ use yii\db\ActiveQueryInterface;
  * CollectionBehavior
  *
  * @author Carsten Brandt <mail@cebe.cc>
- * @since 2.0
+ * @since 1.0
  */
 class CollectionBehavior extends Behavior
 {

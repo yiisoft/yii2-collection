@@ -18,7 +18,7 @@ use yii\helpers\Json;
  * ModelCollection
  *
  * @author Carsten Brandt <mail@cebe.cc>
- * @since 2.0
+ * @since 1.0
  */
 class ModelCollection extends Collection
 {

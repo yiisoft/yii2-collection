@@ -45,7 +45,7 @@ use yii\helpers\ArrayHelper;
  * ```
  *
  * @author Carsten Brandt <mail@cebe.cc>
- * @since 2.0
+ * @since 1.0
  */
 class Collection extends Component implements ArrayAccess, Iterator, Countable
 {

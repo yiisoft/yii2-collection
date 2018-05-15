@@ -31,7 +31,7 @@
         }
     ],
     "autoload": {
-        "psr-4": {"yii\\collection\\": ""}
+        "psr-4": {"yii\\collection\\": "src"}
     },
     "autoload-dev": {
         "psr-4": {"yiiunit\\collection\\": "tests"}

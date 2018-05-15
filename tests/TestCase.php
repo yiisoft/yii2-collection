@@ -6,11 +6,11 @@ use yii\db\Connection;
 use yii\helpers\ArrayHelper;
 use Yii;
 
-if (!class_exists('\PHPUnit_Framework_TestCase') && class_exists('\PHPUnit\Framework\TestCase')) {
-    class_alias('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
+if (!class_exists('\PHPUnit\Framework\TestCase') && class_exists('\PHPUnit_Framework_TestCase')) {
+    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
 }
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function setUp()
     {
@@ -22,7 +22,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ]);
-        \Yii::$app->db->createCommand()->createTable('customers', [
+        Yii::$app->db->createCommand()->createTable('customers', [
             'id' => 'pk',
             'name' => 'string NOT NULL',
             'age' => 'integer NOT NULL',

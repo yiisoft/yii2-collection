@@ -13,7 +13,7 @@ use Countable;
 use Iterator;
 use yii\base\Component;
 use yii\base\InvalidCallException;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 
@@ -301,7 +301,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * Please refer to the [PHP manual](http://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
      * @return static a new collection containing the sorted items.
-     * @throws InvalidParamException if the $direction or $sortFlag parameters do not have
+     * @throws InvalidArgumentException if the $direction or $sortFlag parameters do not have
      * correct number of elements as that of $key.
      * @see ArrayHelper::multisort()
      */
@@ -366,7 +366,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         } elseif (is_array($collection)) {
             return new static(array_merge($this->getData(), $collection));
         }
-        throw new InvalidParamException('Collection can only be merged with an array or other collections.');
+        throw new InvalidArgumentException('Collection can only be merged with an array or other collections.');
     }
 
     /**

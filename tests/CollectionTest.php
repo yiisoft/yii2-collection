@@ -364,7 +364,7 @@ class CollectionTest extends TestCase
     }
 
     /**
-     * @expectedException \yii\base\InvalidParamException
+     * @expectedException \yii\base\InvalidArgumentException
      */
     public function testMergeWrongType()
     {

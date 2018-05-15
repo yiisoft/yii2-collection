@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -13,7 +12,7 @@ use yii\base\InvalidConfigException;
 use yii\db\ActiveQueryInterface;
 
 /**
- * Class CollectionBehavior
+ * CollectionBehavior
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
@@ -42,5 +41,4 @@ class CollectionBehavior extends Behavior
     {
         return new GeneratorCollection($this->owner);
     }
-
 }

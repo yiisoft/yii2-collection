@@ -1,16 +1,24 @@
 <?php
+/**
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ */
 
 namespace yii\collection;
-
 
 use yii\base\Arrayable;
 use yii\base\InvalidCallException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecordInterface;
 use yii\db\BaseActiveRecord;
+use yii\helpers\Json;
 
 /**
- * Class ModelCollection
+ * ModelCollection
+ *
+ * @author Carsten Brandt <mail@cebe.cc>
+ * @since 2.0
  */
 class ModelCollection extends Collection
 {
@@ -21,6 +29,7 @@ class ModelCollection extends Collection
     public $query;
 
     private $_models;
+
 
     /**
      * Collection constructor.
@@ -165,5 +174,4 @@ class ModelCollection extends Collection
     {
         return Json::encode($this->toArray()->_models, $options);
     }
-
 }

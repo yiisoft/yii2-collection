@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -180,9 +179,8 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
             $value = ($field === null ? $model : ArrayHelper::getValue($model, $field, 0));
             if ($carry === null) {
                 return $value;
-            } else {
-                return $value > $carry ? $value : $carry;
             }
+            return $value > $carry ? $value : $carry;
         });
     }
 
@@ -198,9 +196,8 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
             $value = ($field === null ? $model : ArrayHelper::getValue($model, $field, 0));
             if ($carry === null) {
                 return $value;
-            } else {
-                return $value < $carry ? $value : $carry;
             }
+            return $value < $carry ? $value : $carry;
         });
     }
 
@@ -497,9 +494,8 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         return $this->map(function($i) use ($item, $replacement, $strict) {
             if ($strict ? $i === $item : $i == $item) {
                 return $replacement;
-            } else {
-                return $i;
             }
+            return $i;
         });
     }
 
@@ -553,7 +549,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * @param mixed $offset <p>
      * An offset to check for.
      * </p>
-     * @return boolean true on success or false on failure.
+     * @return bool true on success or false on failure.
      * </p>
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
@@ -651,7 +647,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     /**
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
     public function valid()

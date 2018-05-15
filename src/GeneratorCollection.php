@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @link http://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -24,7 +23,7 @@ use yii\helpers\Json;
 // TODO lazy evaluation of collection
 
 /**
- * Class GeneratorCollection
+ * GeneratorCollection
  *
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 2.0
@@ -64,14 +63,14 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function map($callable)
     {
-        foreach($this->queryEach() as $key => $value) {
+        foreach ($this->queryEach() as $key => $value) {
             yield $key => $callable($value, $key);
         }
     }
 
     public function filter($callable)
     {
-        foreach($this->queryEach() as $key => $value) {
+        foreach ($this->queryEach() as $key => $value) {
             if ($callable($value, $key)) {
                 yield $key => $value;
             }
@@ -80,8 +79,8 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function flatMap($callable)
     {
-        foreach($this->queryEach() as $key => $value) {
-            foreach($callable($value, $key) as $k => $v) {
+        foreach ($this->queryEach() as $key => $value) {
+            foreach ($callable($value, $key) as $k => $v) {
                 yield $k => $v;
             }
         }
@@ -89,7 +88,7 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function indexBy($index)
     {
-        foreach($this->queryEach() as $key => $model) {
+        foreach ($this->queryEach() as $key => $model) {
             yield ArrayHelper::getValue($model, $index) => $model;
         }
     }
@@ -97,7 +96,7 @@ class GeneratorCollection extends Component implements \Iterator
     public function reduce($callable, $initialValue = null)
     {
         $result = $initialValue;
-        foreach($this->queryEach() as $key => $value) {
+        foreach ($this->queryEach() as $key => $value) {
             $result = $callable($result, $value);
         }
         return $result;
@@ -105,14 +104,14 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function values()
     {
-        foreach($this->queryEach() as $key => $value) {
+        foreach ($this->queryEach() as $key => $value) {
             yield $value;
         }
     }
 
     public function keys()
     {
-        foreach($this->queryEach() as $key => $value) {
+        foreach ($this->queryEach() as $key => $value) {
             yield $key;
         }
     }
@@ -130,9 +129,8 @@ class GeneratorCollection extends Component implements \Iterator
             $value = ArrayHelper::getValue($model, $field, 0);
             if ($carry === null) {
                 return $value;
-            } else {
-                return $value > $carry ? $value : $carry;
             }
+            return $value > $carry ? $value : $carry;
         });
     }
 
@@ -142,9 +140,8 @@ class GeneratorCollection extends Component implements \Iterator
             $value = ArrayHelper::getValue($model, $field, 0);
             if ($carry === null) {
                 return $value;
-            } else {
-                return $value < $carry ? $value : $carry;
             }
+            return $value < $carry ? $value : $carry;
         });
     }
 
@@ -233,7 +230,7 @@ class GeneratorCollection extends Component implements \Iterator
     /**
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
     public function valid()

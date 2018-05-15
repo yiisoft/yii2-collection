@@ -46,7 +46,7 @@ your `ActiveRecord` classes by overriding the `find()` method:
 
 ```php
 /**
- * @inheritdoc
+ * {@inheritdoc}
  * @return \yii\db\ActiveQuery|\yii\collection\CollectionBehavior
  */
 public static function find()

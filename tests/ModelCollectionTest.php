@@ -10,6 +10,7 @@ namespace yiiunit\collection;
 use yii\db\ActiveQuery;
 use yii\collection\Collection;
 use yiiunit\collection\models\Customer;
+use yiiunit\collection\models\CustomerCollection;
 
 class ModelCollectionTest extends TestCase
 {
@@ -30,5 +31,13 @@ class ModelCollectionTest extends TestCase
     {
         $this->assertInstanceOf(Collection::class, Customer::find()->collect());
         $this->assertInstanceOf(ActiveQuery::class, Customer::find()->collect()->query);
+    }
+
+    /**
+     * @depends testCollect
+     */
+    public function testCollectCustomClass()
+    {
+        $this->assertInstanceOf(CustomerCollection::class, Customer::find()->collect(CustomerCollection::class));
     }
 }

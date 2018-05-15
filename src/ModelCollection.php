@@ -170,6 +170,12 @@ class ModelCollection extends Collection
         });
     }
 
+    /**
+     * Encodes the collected models into a JSON string.
+     * @param int $options the encoding options. For more details please refer to
+     * <http://www.php.net/manual/en/function.json-encode.php>. Default is `JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE`.
+     * @return string the encoding result.
+     */
     public function toJson($options = 320)
     {
         return Json::encode($this->toArray()->_models, $options);

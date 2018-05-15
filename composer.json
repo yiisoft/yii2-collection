@@ -22,10 +22,19 @@
         "yiisoft/yii2": "~2.0.11"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7.27"
+        "phpunit/phpunit": "^5.7.27|^6.2"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
     "autoload": {
-        "psr-4": { "yii\\collection\\": "" }
+        "psr-4": {"yii\\collection\\": ""}
+    },
+    "autoload-dev": {
+        "psr-4": {"yiiunit\\collection\\": "tests"}
     },
     "extra": {
         "branch-alias": {

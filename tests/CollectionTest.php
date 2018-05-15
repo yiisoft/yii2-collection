@@ -1,12 +1,10 @@
 <?php
 
-namespace yiiunit\extensions\collection;
+namespace yiiunit\collection;
 
-
-use yii\base\InvalidCallException;
 use yii\data\Pagination;
 use yii\collection\Collection;
-use yiiunit\extensions\collection\models\Customer;
+use yiiunit\collection\models\Customer;
 
 class CollectionTest extends TestCase
 {

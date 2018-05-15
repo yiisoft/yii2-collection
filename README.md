@@ -45,14 +45,14 @@ To use this extension, you have to attach the `yii\collection\CollectionBehavior
 your `ActiveRecord` classes by overriding the `find()` method:
 
 ```php
-    /**
-     * @inheritdoc
-     * @return \yii\db\ActiveQuery|\yii\collection\CollectionBehavior
-     */
-    public static function find()
-    {
-        $query = parent::find();
-        $query->attachBehavior('collection', \yii\collection\CollectionBehavior::class);
-        return $query;
-    }
+/**
+ * @inheritdoc
+ * @return \yii\db\ActiveQuery|\yii\collection\CollectionBehavior
+ */
+public static function find()
+{
+    $query = parent::find();
+    $query->attachBehavior('collection', \yii\collection\CollectionBehavior::class);
+    return $query;
+}
 ```

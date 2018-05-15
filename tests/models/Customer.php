@@ -1,6 +1,6 @@
 <?php
 
-namespace yiiunit\extensions\collection\models;
+namespace yiiunit\collection\models;
 
 use yii\db\ActiveRecord;
 use yii\collection\CollectionBehavior;

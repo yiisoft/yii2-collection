@@ -1,12 +1,11 @@
 <?php
 
-namespace yiiunit\extensions\collection;
-
+namespace yiiunit\collection;
 
 use yii\db\ActiveQuery;
 use yii\db\Connection;
 use yii\collection\Collection;
-use yiiunit\extensions\collection\models\Customer;
+use yiiunit\collection\models\Customer;
 
 class ModelCollectionTest extends TestCase
 {

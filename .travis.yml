@@ -26,9 +26,10 @@ before_script:
     if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
       PHPUNIT_FLAGS="--coverage-clover=coverage.clover"
     fi
+  - composer require --prefer-dist --no-interaction 'phpunit/phpunit:~5.7.27|^6.2'
 
 script:
-  - vendor/bin/phpunit $PHPUNIT_FLAGS
+  - phpunit $PHPUNIT_FLAGS
 
 after_script:
   - |

@@ -13,16 +13,16 @@ TBD
 `yii\collection\CollectionBehavior` をアタッチします。
 
 ```php
-    /**
-     * @inheritdoc
-     * @return \yii\db\ActiveQuery|CollectionBehavior
-     */
-    public static function find()
-    {
-        $query = parent::find();
-        $query->attachBehavior('collection', CollectionBehavior::class);
-        return $query;
-    }
+/**
+ * {@inheritdoc}
+ * @return \yii\db\ActiveQuery|CollectionBehavior
+ */
+public static function find()
+{
+    $query = parent::find();
+    $query->attachBehavior('collection', CollectionBehavior::class);
+    return $query;
+}
 ```
 
 使用方法

@@ -33,13 +33,13 @@ class ModelCollection extends Collection
 
     /**
      * Collection constructor.
-     * @param array $data
+     * @param array $models
      * @param array $config
      */
     public function __construct($models = [], $config = [])
     {
         $this->_models = $models;
-        parent::__construct([], $config);
+        parent::__construct($models, $config);
     }
 
     /**
@@ -51,10 +51,22 @@ class ModelCollection extends Collection
             if ($this->query === null) {
                 throw new InvalidCallException('This collection was not created from a query.');
             }
-            $this->_models = $this->query->all();
+            $this->_models = $this->queryAll();
             $this->setData($this->_models);
         }
         return parent::getData();
+    }
+
+    private function queryAll()
+    {
+        return $this->query->all();
+    }
+
+    private function ensureModels()
+    {
+        if ($this->_models === null) {
+            $this->_models = $this->queryAll();
+        }
     }
 
     /**

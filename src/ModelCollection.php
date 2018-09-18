@@ -39,7 +39,7 @@ class ModelCollection extends Collection
     public function __construct($models = [], $config = [])
     {
         $this->_models = $models;
-        parent::__construct($models, $config);
+        parent::__construct([], $config);
     }
 
     /**

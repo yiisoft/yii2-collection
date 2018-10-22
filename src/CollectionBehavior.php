@@ -110,9 +110,10 @@ class CollectionBehavior extends Behavior
     /**
      * Returns query result as a batch collection object.
      * @param string|null $collectionClass collection class, if not set - [[batchCollectionClass]] will be used.
+     * @param int $batchSize the number of records to be fetched in each batch.
      * @return GeneratorCollection|\yii\db\BaseActiveRecord[] models collection instance.
      */
-    public function batchCollect($collectionClass = null)
+    public function batchCollect($collectionClass = null, $batchSize = 100)
     {
         if ($collectionClass === null) {
             $collectionClass = $this->batchCollectionClass;
@@ -121,9 +122,10 @@ class CollectionBehavior extends Behavior
         return Yii::createObject(
             [
                 'class' => $collectionClass,
+                'query' => $this->owner,
             ],
             [
-                $this->owner
+                $batchSize,
             ]
         );
     }

@@ -13,6 +13,7 @@ use yii\base\InvalidCallException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveRecordInterface;
+use yii\db\BaseActiveRecord;
 use yii\db\BatchQueryResult;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -36,19 +37,27 @@ class GeneratorCollection extends Component implements \Iterator
     public $query;
 
     /**
+     * @var int
+     */
+    public $batchSize;
+
+    /**
      * @var BatchQueryResult
      */
     private $_batch;
 
-    public function __construct($query, $config = [])
+    public function __construct($batchSize, $config = [])
     {
-        $this->query = $query;
+        $this->batchSize = $batchSize;
         parent::__construct($config);
     }
 
+    /**
+     * @return BatchQueryResult|BaseActiveRecord[]
+     */
     private function queryEach()
     {
-        return $this->query->each(); // TODO inject DB
+        return $this->query->each($this->batchSize); // TODO inject DB
     }
 
     private function ensureBatch()
@@ -118,14 +127,14 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function sum($field)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             return $carry + ArrayHelper::getValue($model, $field, 0);
         }, 0);
     }
 
     public function max($field)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             $value = ArrayHelper::getValue($model, $field, 0);
             if ($carry === null) {
                 return $value;
@@ -136,7 +145,7 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function min($field)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             $value = ArrayHelper::getValue($model, $field, 0);
             if ($carry === null) {
                 return $value;
@@ -147,7 +156,9 @@ class GeneratorCollection extends Component implements \Iterator
 
     public function count()
     {
-        return $this->reduce(function($carry) { return $carry + 1; }, 0);
+        return $this->reduce(function ($carry) {
+            return $carry + 1;
+        }, 0);
     }
 
     // AR specific stuff
@@ -159,7 +170,7 @@ class GeneratorCollection extends Component implements \Iterator
      */
     public function deleteAll()
     {
-        foreach($this->queryEach() as $model) {
+        foreach ($this->queryEach() as $model) {
             $model->delete();
         }
     }
@@ -171,7 +182,7 @@ class GeneratorCollection extends Component implements \Iterator
      */
     public function updateAll($attributes, $safeOnly = true, $runValidation = true)
     {
-        foreach($this->queryEach() as $model) {
+        foreach ($this->queryEach() as $model) {
             $model->setAttributes($attributes, $safeOnly);
             $model->update($runValidation, array_keys($attributes));
         }
@@ -186,9 +197,9 @@ class GeneratorCollection extends Component implements \Iterator
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true)
     {
-        return $this->map(function($model) use ($fields, $expand, $recursive) {
+        return $this->map(function ($model) use ($fields, $expand, $recursive) {
             /** @var $model Arrayable */
-            return $model->toArray();
+            return $model->toArray($fields, $expand, $recursive);
         });
     }
 

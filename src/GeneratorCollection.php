@@ -9,14 +9,10 @@ namespace yii\collection;
 
 use yii\base\Arrayable;
 use yii\base\Component;
-use yii\base\InvalidCallException;
 use yii\db\ActiveQuery;
-use yii\db\ActiveQueryInterface;
-use yii\db\ActiveRecordInterface;
 use yii\db\BaseActiveRecord;
 use yii\db\BatchQueryResult;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 
 // TODO take a look at https://github.com/nikic/iter
 // TODO take a look at https://github.com/Athari/YaLinqo

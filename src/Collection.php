@@ -67,14 +67,6 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     }
 
     /**
-     * @param array $data
-     */
-    public function setData($data)
-    {
-        $this->_data = $data;
-    }
-
-    /**
      * @return array data contained in this collection.
      */
     public function getData()

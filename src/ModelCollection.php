@@ -28,6 +28,9 @@ class ModelCollection extends Collection
      */
     public $query;
 
+    /**
+     * @var array|BaseActiveRecord[]
+     */
     private $_models;
 
 
@@ -39,7 +42,7 @@ class ModelCollection extends Collection
     public function __construct($models = [], $config = [])
     {
         $this->_models = $models;
-        parent::__construct([], $config);
+        parent::__construct($this->queryAll(), $config);
     }
 
     /**
@@ -47,18 +50,15 @@ class ModelCollection extends Collection
      */
     public function getData()
     {
-        if ($this->_models === null) {
-            if ($this->query === null) {
-                throw new InvalidCallException('This collection was not created from a query.');
-            }
-            $this->_models = $this->queryAll();
-            $this->setData($this->_models);
-        }
+        $this->ensureModels();
         return parent::getData();
     }
 
     private function queryAll()
     {
+        if ($this->query === null) {
+            throw new InvalidCallException('This collection was not created from a query.');
+        }
         return $this->query->all();
     }
 
@@ -107,7 +107,7 @@ class ModelCollection extends Collection
     public function deleteAll()
     {
         $this->ensureModels();
-        foreach($this->_models as $model) {
+        foreach ($this->_models as $model) {
             $model->delete();
         }
     }
@@ -115,7 +115,7 @@ class ModelCollection extends Collection
     public function scenario($scenario)
     {
         $this->ensureModels();
-        foreach($this->_models as $model) {
+        foreach ($this->_models as $model) {
             $model->scenario = $scenario;
         }
         return $this;
@@ -125,28 +125,54 @@ class ModelCollection extends Collection
      * https://github.com/yiisoft/yii2/issues/13921
      *
      * TODO add transaction support
+     * @param array $attributes
+     * @param bool $safeOnly
+     * @param bool $runValidation
+     * @return ModelCollection
+     * @throws \yii\db\Exception
+     * @throws \yii\db\StaleObjectException
      */
     public function updateAll($attributes, $safeOnly = true, $runValidation = true)
     {
         $this->ensureModels();
-        foreach($this->_models as $model) {
+        foreach ($this->_models as $model) {
             $model->setAttributes($attributes, $safeOnly);
             $model->update($runValidation, array_keys($attributes));
         }
         return $this;
     }
 
-    public function insertAll()
+    /**
+     * @param array $attributes
+     * @param bool $safeOnly
+     * @param bool $runValidation
+     * @return $this
+     */
+    public function insertAll($attributes, $safeOnly = true, $runValidation = true)
     {
+        $this->ensureModels();
+        foreach ($this->_models as $model) {
+            $model->setAttributes($attributes, $safeOnly);
+            $model->insert($runValidation, array_keys($attributes));
+        }
         // TODO could be a batch insert
+        return $this;
+    }
+
+    public function fillAll($attributes, $safeOnly = true)
+    {
+        $this->ensureModels();
+        foreach ($this->_models as $model) {
+            $model->setAttributes($attributes, $safeOnly);
+        }
         return $this;
     }
 
     public function saveAll($runValidation = true, $attributeNames = null)
     {
         $this->ensureModels();
-        foreach($this->_models as $model) {
-            $model->update($runValidation, $attributeNames);
+        foreach ($this->_models as $model) {
+            $model->save($runValidation, $attributeNames);
         }
         return $this;
     }
@@ -160,7 +186,7 @@ class ModelCollection extends Collection
     {
         $this->ensureModels();
         $success = true;
-        foreach($this->_models as $model) {
+        foreach ($this->_models as $model) {
             if (!$model->validate()) {
                 $success = false;
             }
@@ -176,9 +202,9 @@ class ModelCollection extends Collection
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true)
     {
-        return $this->map(function($model) use ($fields, $expand, $recursive) {
+        return $this->map(function ($model) use ($fields, $expand, $recursive) {
             /** @var $model Arrayable */
-            return $model->toArray();
+            return $model->toArray($fields, $expand, $recursive);
         });
     }
 

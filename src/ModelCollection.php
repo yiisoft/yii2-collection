@@ -92,7 +92,7 @@ class ModelCollection extends Collection
             throw new InvalidCallException('This collection was not created from a query, so findWith() is not possible.');
         }
         $this->ensureModels();
-        $this->query->findWith(['colors'], $this->_models);
+        $this->query->findWith($with, $this->_models);
         return $this;
     }
 

@@ -42,7 +42,7 @@ class ModelCollection extends Collection
     public function __construct($models = [], $config = [])
     {
         $this->_models = $models;
-        parent::__construct($this->queryAll(), $config);
+        parent::__construct([], $config);
     }
 
     /**
@@ -51,7 +51,7 @@ class ModelCollection extends Collection
     public function getData()
     {
         $this->ensureModels();
-        return parent::getData();
+        return (new Collection($this->_models))->getData();
     }
 
     private function queryAll()

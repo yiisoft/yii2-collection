@@ -9,6 +9,7 @@ namespace yii\collection;
 
 use yii\base\Arrayable;
 use yii\base\Component;
+use yii\base\InvalidCallException;
 use yii\db\ActiveQuery;
 use yii\db\BaseActiveRecord;
 use yii\db\BatchQueryResult;
@@ -53,6 +54,9 @@ class GeneratorCollection extends Component implements \Iterator
      */
     private function queryEach()
     {
+        if ($this->query === null) {
+            throw new InvalidCallException('This collection was not created from a query.');
+        }
         return $this->query->each($this->batchSize); // TODO inject DB
     }
 

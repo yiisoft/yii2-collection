@@ -173,7 +173,7 @@ class GeneratorCollection extends Component implements \Iterator
     {
         foreach($this->queryEach() as $model) {
             $model->setAttributes($attributes, $safeOnly);
-            $model->update($runValidation, array_keys($attributes));
+            $model->update($runValidation, \array_keys($attributes));
         }
         return $this;
     }

@@ -93,7 +93,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function map($callable)
     {
-        return new static(array_map($callable, $this->getData()));
+        return new static(\array_map($callable, $this->getData()));
     }
 
     /**
@@ -140,7 +140,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function filter($callable)
     {
-        return new static(array_filter($this->getData(), $callable, ARRAY_FILTER_USE_BOTH));
+        return new static(\array_filter($this->getData(), $callable, ARRAY_FILTER_USE_BOTH));
     }
 
     /**
@@ -151,7 +151,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function reduce($callable, $initialValue = null)
     {
-        return array_reduce($this->getData(), $callable, $initialValue);
+        return \array_reduce($this->getData(), $callable, $initialValue);
     }
 
     /**
@@ -229,9 +229,9 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     {
         $data = $this->getData();
         if ($direction === SORT_ASC) {
-            asort($data, $sortFlag);
+            \asort($data, $sortFlag);
         } else {
-            arsort($data, $sortFlag);
+            \arsort($data, $sortFlag);
         }
         return new static($data);
     }
@@ -253,9 +253,9 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     {
         $data = $this->getData();
         if ($direction === SORT_ASC) {
-            ksort($data, $sortFlag);
+            \ksort($data, $sortFlag);
         } else {
-            krsort($data, $sortFlag);
+            \krsort($data, $sortFlag);
         }
         return new static($data);
     }
@@ -275,9 +275,9 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     {
         $data = $this->getData();
         if ($caseSensitive) {
-            natsort($data);
+            \natsort($data);
         } else {
-            natcasesort($data);
+            \natcasesort($data);
         }
         return new static($data);
     }
@@ -320,7 +320,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function reverse()
     {
-        return new static(array_reverse($this->getData(), true));
+        return new static(\array_reverse($this->getData(), true));
     }
 
     /**
@@ -329,7 +329,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function values()
     {
-        return new static(array_values($this->getData()));
+        return new static(\array_values($this->getData()));
     }
 
     /**
@@ -338,7 +338,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function keys()
     {
-        return new static(array_keys($this->getData()));
+        return new static(\array_keys($this->getData()));
     }
 
     /**
@@ -347,7 +347,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function flip()
     {
-        return new static(array_flip($this->getData()));
+        return new static(\array_flip($this->getData()));
     }
 
     /**
@@ -362,9 +362,9 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     public function merge($collection)
     {
         if ($collection instanceof Collection) {
-            return new static(array_merge($this->getData(), $collection->getData()));
-        } elseif (is_array($collection)) {
-            return new static(array_merge($this->getData(), $collection));
+            return new static(\array_merge($this->getData(), $collection->getData()));
+        } elseif (\is_array($collection)) {
+            return new static(\array_merge($this->getData(), $collection));
         }
         throw new InvalidArgumentException('Collection can only be merged with an array or other collections.');
     }
@@ -510,7 +510,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function slice($offset, $limit = null, $preserveKeys = true)
     {
-        return new static(array_slice($this->getData(), $offset, $limit, $preserveKeys));
+        return new static(\array_slice($this->getData(), $offset, $limit, $preserveKeys));
     }
 
     /**
@@ -615,7 +615,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         if ($this->_iteratorData === null) {
             $this->_iteratorData = $this->getData();
         }
-        return current($this->_iteratorData);
+        return \current($this->_iteratorData);
     }
 
     /**
@@ -628,7 +628,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         if ($this->_iteratorData === null) {
             $this->_iteratorData = $this->getData();
         }
-        next($this->_iteratorData);
+        \next($this->_iteratorData);
     }
 
     /**
@@ -641,7 +641,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         if ($this->_iteratorData === null) {
             $this->_iteratorData = $this->getData();
         }
-        return key($this->_iteratorData);
+        return \key($this->_iteratorData);
     }
 
     /**
@@ -655,7 +655,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         if ($this->_iteratorData === null) {
             $this->_iteratorData = $this->getData();
         }
-        return current($this->_iteratorData) !== false;
+        return \current($this->_iteratorData) !== false;
     }
 
     /**
@@ -666,6 +666,6 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     public function rewind()
     {
         $this->_iteratorData = $this->getData();
-        reset($this->_iteratorData);
+        \reset($this->_iteratorData);
     }
 }

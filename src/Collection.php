@@ -78,7 +78,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * @param array $data
      * @return Collection
      */
-    public static function from(array $data = [])
+    public static function fromArray(array $data = [])
     {
         return new static($data);
     }

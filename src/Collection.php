@@ -162,7 +162,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function sum($field = null)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             return $carry + ($field === null ? $model : ArrayHelper::getValue($model, $field, 0));
         }, 0);
     }
@@ -175,7 +175,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function max($field = null)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             $value = ($field === null ? $model : ArrayHelper::getValue($model, $field, 0));
             if ($carry === null) {
                 return $value;
@@ -192,7 +192,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function min($field = null)
     {
-        return $this->reduce(function($carry, $model) use ($field) {
+        return $this->reduce(function ($carry, $model) use ($field) {
             $value = ($field === null ? $model : ArrayHelper::getValue($model, $field, 0));
             if ($carry === null) {
                 return $value;
@@ -399,7 +399,9 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function indexBy($key)
     {
-        return $this->remap($key, function ($model) { return $model; });
+        return $this->remap($key, function ($model) {
+            return $model;
+        });
     }
 
     /**
@@ -439,13 +441,13 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     public function contains($item, $strict = false)
     {
         if ($item instanceof Closure) {
-            foreach($this->getData() as $i) {
+            foreach ($this->getData() as $i) {
                 if ($item($i)) {
                     return true;
                 }
             }
         } else {
-            foreach($this->getData() as $i) {
+            foreach ($this->getData() as $i) {
                 if ($strict ? $i === $item : $i == $item) {
                     return true;
                 }
@@ -469,11 +471,17 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
     public function remove($item, $strict = false)
     {
         if ($item instanceof Closure) {
-            $fun = function($i) use ($item) { return !$item($i); };
+            $fun = function ($i) use ($item) {
+                return !$item($i);
+            };
         } elseif ($strict) {
-            $fun = function($i) use ($item) { return $i !== $item; };
+            $fun = function ($i) use ($item) {
+                return $i !== $item;
+            };
         } else {
-            $fun = function($i) use ($item) { return $i != $item; };
+            $fun = function ($i) use ($item) {
+                return $i != $item;
+            };
         }
         return $this->filter($fun);
     }
@@ -491,7 +499,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      */
     public function replace($item, $replacement, $strict = false)
     {
-        return $this->map(function($i) use ($item, $replacement, $strict) {
+        return $this->map(function ($i) use ($item, $replacement, $strict) {
             if ($strict ? $i === $item : $i == $item) {
                 return $replacement;
             }
@@ -553,6 +561,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * </p>
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
+     * </p>
      */
     public function offsetExists($offset)
     {

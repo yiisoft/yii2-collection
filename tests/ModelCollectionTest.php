@@ -31,6 +31,7 @@ class ModelCollectionTest extends TestCase
     {
         $this->assertInstanceOf(Collection::class, Customer::find()->collect());
         $this->assertInstanceOf(ActiveQuery::class, Customer::find()->collect()->query);
+        $this->assertEquals(0, Customer::find()->collect()->count());
     }
 
     /**

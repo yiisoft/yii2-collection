@@ -7,6 +7,9 @@
 
 namespace yii\collection;
 
+use ArrayAccess;
+use IteratorAggregate;
+use Countable;
 use Closure;
 use yii\base\ArrayAccessTrait;
 use yii\base\Component;
@@ -45,7 +48,7 @@ use yii\helpers\ArrayHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 1.0
  */
-class Collection extends Component
+class Collection extends Component implements ArrayAccess, IteratorAgregate, Countable
 {
     use ArrayAccessTrait;
 

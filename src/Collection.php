@@ -555,6 +555,17 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
     }
 
     /**
+     * @param int|string $offset Offset to set.
+     * @param mixed $value The value to set.
+     * @return void
+     * @throws InvalidCallException
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new InvalidCallException('Read only collection');
+    }
+
+    /**
      * Clones collection objects.
      *
      * @return void

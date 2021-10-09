@@ -7,10 +7,8 @@
 
 namespace yii\collection;
 
-use ArrayAccess;
 use Closure;
-use Countable;
-use Iterator;
+use yii\base\ArrayAccessTrait;
 use yii\base\Component;
 use yii\base\InvalidCallException;
 use yii\base\InvalidArgumentException;
@@ -33,8 +31,8 @@ use yii\helpers\ArrayHelper;
  * })->sum(); // 5
  * ```
  *
- * The collection implements [[ArrayAccess]], [[Iterator]], and [[Countable]], so you can access it in
- * the same way you use a PHP array. A collection however is read-only, you can not manipulate single items.
+ * The collection use [[ArrayAccessTrait]], so you can access it in the same way you use a PHP array.
+ * A collection however is read-only, you can not manipulate single items.
  *
  * ```php
  * $collection = new Collection([1, 2, 3]);
@@ -47,31 +45,46 @@ use yii\helpers\ArrayHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 1.0
  */
-class Collection extends Component implements ArrayAccess, Iterator, Countable
+class Collection extends Component
 {
-    /**
-     * @var array data contained in this collection.
-     */
-    private $_data;
-
+    use ArrayAccessTrait;
 
     /**
-     * Collection constructor.
-     * @param array $data
-     * @param array $config
+     * @var array the collection data
      */
-    public function __construct(array $data = [], $config = [])
+    private $data;
+
+    /**
+     * Creates new collection.
+     *
+     * @param array $data the collection data.
+     * @param array $config the configuration.
+     */
+    public function __construct(array $data, array $config = [])
     {
-        $this->_data = $data;
+        $this->setData($data);
         parent::__construct($config);
     }
 
     /**
-     * @return array data contained in this collection.
+     * Returns the data contained in this collection.
+     *
+     * @return array the reference to collection data.
      */
-    public function getData()
+    public function &getData()
     {
-        return $this->_data;
+        return $this->data;
+    }
+
+    /**
+     * Sets the collection data.
+     *
+     * @param array $data the collection data.
+     * @return void
+     */
+    protected function setData(array $data)
+    {
+        $this->data = $data;
     }
 
     /**
@@ -82,13 +95,11 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         return $this->count() === 0;
     }
 
-    // basic collection operations
-
     /**
      * Apply callback to all items in the collection.
      *
      * The original collection will not be changed, a new collection with modified data is returned.
-     * @param callable $callable the callback function to apply. Signature: `function($model)`.
+     * @param callable $callable the callback function to apply, syntax: `function (mixed $value): mixed`.
      * @return static a new collection with items returned from the callback.
      */
     public function map($callable)
@@ -103,7 +114,7 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
      * returned by the callback.
      *
      * The original collection will not be changed, a new collection with modified data is returned.
-     * @param callable $callable the callback function to apply. Signature: `function($model)`. Should return an array of items.
+     * @param callable $callable the callback function to apply, syntax: `function (mixed $value): mixed`.
      * @return static a new collection with items returned from the callback.
      */
     public function flatMap($callable)
@@ -199,15 +210,6 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
             }
             return $value < $carry ? $value : $carry;
         });
-    }
-
-    /**
-     * Count items in this collection.
-     * @return int the count of items in this collection.
-     */
-    public function count()
-    {
-        return count($this->getData());
     }
 
     /**
@@ -549,132 +551,17 @@ class Collection extends Component implements ArrayAccess, Iterator, Countable
         return $this->slice($pagination->getOffset(), $limit > 0 ? $limit : null, $preserveKeys);
     }
 
-    // ArrayAccess methods
-
     /**
-     * Whether a offset exists
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
-     * @return bool true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
-     * </p>
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->getData()[$offset]);
-    }
-
-    /**
-     * Offset to retrieve
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     * The offset to retrieve.
-     * </p>
-     * @return mixed Can return all value types.
-     */
-    public function offsetGet($offset)
-    {
-        return $this->getData()[$offset];
-    }
-
-    /**
-     * Offset to set
-     * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     * The offset to assign the value to.
-     * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
+     * Clones collection objects.
+     *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function __clone()
     {
-        throw new InvalidCallException('Collection is readonly.');
-    }
-
-    /**
-     * Offset to unset
-     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     * The offset to unset.
-     * </p>
-     * @return void
-     */
-    public function offsetUnset($offset)
-    {
-        throw new InvalidCallException('Collection is readonly.');
-    }
-
-    // Iterator methods
-
-    private $_iteratorData;
-
-    /**
-     * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
-     */
-    public function current()
-    {
-        if ($this->_iteratorData === null) {
-            $this->_iteratorData = $this->getData();
+        foreach ($this->getData() as &$value) {
+            if (\is_object($value)) {
+                $value = clone $value;
+            }
         }
-        return \current($this->_iteratorData);
-    }
-
-    /**
-     * Move forward to next element
-     * @link http://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
-     */
-    public function next()
-    {
-        if ($this->_iteratorData === null) {
-            $this->_iteratorData = $this->getData();
-        }
-        \next($this->_iteratorData);
-    }
-
-    /**
-     * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
-     */
-    public function key()
-    {
-        if ($this->_iteratorData === null) {
-            $this->_iteratorData = $this->getData();
-        }
-        return \key($this->_iteratorData);
-    }
-
-    /**
-     * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
-     * @return bool The return value will be casted to boolean and then evaluated.
-     * Returns true on success or false on failure.
-     */
-    public function valid()
-    {
-        if ($this->_iteratorData === null) {
-            $this->_iteratorData = $this->getData();
-        }
-        return \current($this->_iteratorData) !== false;
-    }
-
-    /**
-     * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
-     */
-    public function rewind()
-    {
-        $this->_iteratorData = $this->getData();
-        \reset($this->_iteratorData);
     }
 }

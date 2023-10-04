@@ -1,4 +1,5 @@
 # These are supported funding model platforms
 
-github: [cebe]
 open_collective: yiisoft
+github: [yiisoft]
+tidelift: "packagist/yiisoft/yii2-bootstrap5"

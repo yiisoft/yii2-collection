@@ -48,7 +48,7 @@ use yii\helpers\ArrayHelper;
  * @author Carsten Brandt <mail@cebe.cc>
  * @since 1.0
  */
-class Collection extends Component implements ArrayAccess, IteratorAgregate, Countable
+class Collection extends Component implements ArrayAccess, IteratorAggregate, Countable
 {
     use ArrayAccessTrait;
 
@@ -74,7 +74,7 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      *
      * @return array the reference to collection data.
      */
-    public function &getData()
+    public function getData()
     {
         return $this->data;
     }
@@ -560,7 +560,7 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      * @return void
      * @throws InvalidCallException
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new InvalidCallException('Read only collection');
     }

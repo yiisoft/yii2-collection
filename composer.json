@@ -18,11 +18,11 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
+        "php": ">=7.3",
         "yiisoft/yii2": "~2.0.14"
     },
     "require-dev": {
-        "phpunit/phpunit": "<7"
+        "phpunit/phpunit": "^9.6"
     },
     "repositories": [
         {
@@ -39,6 +39,11 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     }
 }

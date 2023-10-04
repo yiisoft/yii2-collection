@@ -14,7 +14,7 @@ use yiiunit\collection\models\CustomerCollection;
 
 class ModelCollectionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockApplication();
 

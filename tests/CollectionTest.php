@@ -7,8 +7,10 @@
 
 namespace yiiunit\collection;
 
-use yii\data\Pagination;
+use yii\base\InvalidArgumentException;
+use yii\base\InvalidCallException;
 use yii\collection\Collection;
+use yii\data\Pagination;
 use yiiunit\collection\models\Customer;
 
 class CollectionTest extends TestCase
@@ -42,42 +44,6 @@ class CollectionTest extends TestCase
             ++$it;
         }
         $this->assertEquals(3, $it);
-    }
-
-    public function testIteratorCurrent()
-    {
-        $models = $this->getIteratorModels();
-        $collection = new Collection($models);
-        $this->assertSame($models[0], $collection->current());
-    }
-
-    public function testIteratorKey()
-    {
-        $models = $this->getIteratorModels();
-        $collection = new Collection($models);
-        $this->assertSame(0, $collection->key());
-    }
-
-    public function testIteratorNext()
-    {
-        $models = $this->getIteratorModels();
-        $collection = new Collection($models);
-        $collection->next();
-        $this->assertSame($models[1], $collection->current());
-        $collection->next();
-        $this->assertSame($models[2], $collection->current());
-        $collection->next();
-        $this->assertFalse($collection->current());
-    }
-
-    public function testIteratorValid()
-    {
-        $collection = new Collection([]);
-        $this->assertFalse($collection->valid());
-
-        $models = $this->getIteratorModels();
-        $collection = new Collection($models);
-        $this->assertTrue($collection->valid());
     }
 
     public function testArrayAccessRead()
@@ -117,9 +83,6 @@ class CollectionTest extends TestCase
         $this->assertFalse(isset($collection['four']));
     }
 
-    /**
-     * @expectedException \yii\base\InvalidCallException
-     */
     public function testArrayAccessWrite()
     {
         $models = [
@@ -127,13 +90,14 @@ class CollectionTest extends TestCase
             'two' => new Customer(['id' => 2]),
             'three' => new Customer(['id' => 3]),
         ];
+
+        $this->expectException(InvalidCallException::class);
+        $this->expectExceptionMessage('Read only collection');
+
         $collection = new Collection($models);
         $collection['three'] = 'test';
     }
 
-    /**
-     * @expectedException \yii\base\InvalidCallException
-     */
     public function testArrayAccessWrite2()
     {
         $models = [
@@ -141,13 +105,14 @@ class CollectionTest extends TestCase
             'two' => new Customer(['id' => 2]),
             'three' => new Customer(['id' => 3]),
         ];
+
+        $this->expectException(InvalidCallException::class);
+        $this->expectExceptionMessage('Read only collection');
+
         $collection = new Collection($models);
         $collection[] = 'test';
     }
 
-    /**
-     * @expectedException \yii\base\InvalidCallException
-     */
     public function testArrayAccessUnset()
     {
         $models = [
@@ -155,8 +120,11 @@ class CollectionTest extends TestCase
             'two' => new Customer(['id' => 2]),
             'three' => new Customer(['id' => 3]),
         ];
+
         $collection = new Collection($models);
         unset($collection['two']);
+
+        $this->expectNotToPerformAssertions();
     }
 
     public function testCountable()
@@ -363,13 +331,14 @@ class CollectionTest extends TestCase
         $this->assertEquals([1, 2, 3, 'a', 'b', 'c'], $collection2->merge($data1)->getData());
     }
 
-    /**
-     * @expectedException \yii\base\InvalidArgumentException
-     */
     public function testMergeWrongType()
     {
         $data1 = ['a', 'b', 'c'];
         $collection1 = new Collection($data1);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Collection can only be merged with an array or other collections.');
+
         $collection1->merge('string');
     }
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
+ * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @license https://www.yiiframework.com/license/
  */
 
 namespace yii\collection;
@@ -224,11 +224,11 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      * @param int $direction sort direction, either `SORT_ASC` or `SORT_DESC`.
      * @param int $sortFlag type of comparison, either `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`,
      * `SORT_LOCALE_STRING`, `SORT_NATURAL` or `SORT_FLAG_CASE`.
-     * See [the PHP manual](http://php.net/manual/en/function.sort.php#refsect1-function.sort-parameters)
+     * See [the PHP manual](https://php.net/manual/en/function.sort.php#refsect1-function.sort-parameters)
      * for details.
      * @return static a new collection containing the sorted items.
-     * @see http://php.net/manual/en/function.asort.php
-     * @see http://php.net/manual/en/function.arsort.php
+     * @see https://php.net/manual/en/function.asort.php
+     * @see https://php.net/manual/en/function.arsort.php
      */
     public function sort($direction = SORT_ASC, $sortFlag = SORT_REGULAR)
     {
@@ -248,11 +248,11 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      * @param int $direction sort direction, either `SORT_ASC` or `SORT_DESC`.
      * @param int $sortFlag type of comparison, either `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`,
      * `SORT_LOCALE_STRING`, `SORT_NATURAL` or `SORT_FLAG_CASE`.
-     * See [the PHP manual](http://php.net/manual/en/function.sort.php#refsect1-function.sort-parameters)
+     * See [the PHP manual](https://php.net/manual/en/function.sort.php#refsect1-function.sort-parameters)
      * for details.
      * @return static a new collection containing the sorted items.
-     * @see http://php.net/manual/en/function.ksort.php
-     * @see http://php.net/manual/en/function.krsort.php
+     * @see https://php.net/manual/en/function.ksort.php
+     * @see https://php.net/manual/en/function.krsort.php
      */
     public function sortByKey($direction = SORT_ASC, $sortFlag = SORT_REGULAR)
     {
@@ -273,8 +273,8 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      * The original collection will not be changed, a new collection with sorted data is returned.
      * @param bool $caseSensitive whether comparison should be done in a case-sensitive manner. Defaults to `false`.
      * @return static a new collection containing the sorted items.
-     * @see http://php.net/manual/en/function.natsort.php
-     * @see http://php.net/manual/en/function.natcasesort.php
+     * @see https://php.net/manual/en/function.natsort.php
+     * @see https://php.net/manual/en/function.natcasesort.php
      */
     public function sortNatural($caseSensitive = false)
     {
@@ -303,7 +303,7 @@ class Collection extends Component implements ArrayAccess, IteratorAgregate, Cou
      * When sorting by multiple keys with different sorting directions, use an array of sorting directions.
      * @param int|array $sortFlag the PHP sort flag. Valid values include
      * `SORT_REGULAR`, `SORT_NUMERIC`, `SORT_STRING`, `SORT_LOCALE_STRING`, `SORT_NATURAL` and `SORT_FLAG_CASE`.
-     * Please refer to the [PHP manual](http://php.net/manual/en/function.sort.php)
+     * Please refer to the [PHP manual](https://php.net/manual/en/function.sort.php)
      * for more details. When sorting by multiple keys with different sort flags, use an array of sort flags.
      * @return static a new collection containing the sorted items.
      * @throws InvalidArgumentException if the $direction or $sortFlag parameters do not have

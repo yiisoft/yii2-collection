@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -11,16 +12,12 @@ use yii\db\Connection;
 use yii\helpers\ArrayHelper;
 use Yii;
 
-if (!class_exists('\PHPUnit\Framework\TestCase') && class_exists('\PHPUnit_Framework_TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockApplication();
 
@@ -37,7 +34,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * Clean up after test.
      * By default the application created with [[mockApplication]] will be destroyed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->destroyApplication();
@@ -50,7 +47,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param array $config The application configuration, if needed
      * @param string $appClass name of the application class to create
      */
-    protected function mockApplication($config = [], $appClass = \yii\console\Application::class)
+    protected function mockApplication($config = [], $appClass = \yii\console\Application::class): void
     {
         new $appClass(ArrayHelper::merge([
             'id' => 'testapp',
@@ -68,7 +65,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Destroys application in Yii::$app by setting it to null.
      */
-    protected function destroyApplication()
+    protected function destroyApplication(): void
     {
         Yii::$app = null;
     }

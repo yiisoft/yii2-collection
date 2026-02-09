@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @link https://www.yiiframework.com/
  * @copyright Copyright (c) 2008 Yii Software LLC
@@ -14,7 +15,7 @@ use yiiunit\collection\models\CustomerCollection;
 
 class ModelCollectionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockApplication();
 
@@ -27,7 +28,7 @@ class ModelCollectionTest extends TestCase
         parent::setUp();
     }
 
-    public function testCollect()
+    public function testCollect(): void
     {
         $this->assertInstanceOf(Collection::class, Customer::find()->collect());
         $this->assertInstanceOf(ActiveQuery::class, Customer::find()->collect()->query);
@@ -37,7 +38,7 @@ class ModelCollectionTest extends TestCase
     /**
      * @depends testCollect
      */
-    public function testCollectCustomClass()
+    public function testCollectCustomClass(): void
     {
         $this->assertInstanceOf(CustomerCollection::class, Customer::find()->collect(CustomerCollection::class));
     }

@@ -1,0 +1,523 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Class yii\\collection\\Collection implements generic interface ArrayAccess but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Class yii\\collection\\Collection implements generic interface IteratorAggregate but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:__construct\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:__construct\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:getData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:max\(\) has parameter \$field with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:merge\(\) has parameter \$collection with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:merge\(\) has parameter \$collection with no value type specified in iterable type array\|yii\\collection\\Collection\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:min\(\) has parameter \$field with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:paginate\(\) has parameter \$preserveKeys with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:setData\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:sortBy\(\) has parameter \$direction with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:sortBy\(\) has parameter \$key with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:sortBy\(\) has parameter \$sortFlag with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Method yii\\collection\\Collection\:\:sum\(\) has parameter \$field with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Property yii\\collection\\Collection\:\:\$data type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Collection.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 16
+			path: src/Collection.php
+
+		-
+			message: '#^Class yii\\collection\\CollectionBehavior extends generic class yii\\base\\Behavior but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/CollectionBehavior.php
+
+		-
+			message: '#^Method yii\\collection\\CollectionBehavior\:\:attach\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/CollectionBehavior.php
+
+		-
+			message: '#^Parameter \#1 \$type of static method yii\\BaseYii\<yii\\web\\IdentityInterface\>\:\:createObject\(\) expects array\{class\?\: class\-string\<mixed\>, __class\?\: class\-string\<mixed\>\}\|\(callable\(\)\: mixed\)\|class\-string\<mixed\>, array\{class\: string, query\: yii\\base\\Component\|null\} given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/CollectionBehavior.php
+
+		-
+			message: '#^Unable to resolve the template type T in call to static method yii\\BaseYii\<yii\\web\\IdentityInterface\>\:\:createObject\(\)$#'
+			identifier: argument.templateType
+			count: 2
+			path: src/CollectionBehavior.php
+
+		-
+			message: '#^Class yii\\collection\\GeneratorCollection implements generic interface Iterator but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:__construct\(\) has parameter \$batchSize with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:count\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:deleteAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:ensureBatch\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:filter\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:filter\(\) has parameter \$callable with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:flatMap\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:flatMap\(\) has parameter \$callable with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:indexBy\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:indexBy\(\) has parameter \$index with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:keys\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:map\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:map\(\) has parameter \$callable with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:max\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:max\(\) has parameter \$field with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:min\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:min\(\) has parameter \$field with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:queryEach\(\) should return iterable\<yii\\db\\BaseActiveRecord\>&yii\\db\\BatchQueryResult but returns iterable\<int, array\|yii\\db\\ActiveRecord\>&yii\\db\\BatchQueryResult\.$#'
+			identifier: return.type
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:reduce\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:reduce\(\) has parameter \$callable with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:reduce\(\) has parameter \$initialValue with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:sum\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:sum\(\) has parameter \$field with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:toArray\(\) has parameter \$expand with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:toArray\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:updateAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:updateAll\(\) has parameter \$attributes with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:updateAll\(\) has parameter \$runValidation with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:updateAll\(\) has parameter \$safeOnly with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Method yii\\collection\\GeneratorCollection\:\:values\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$model Arrayable\)\: Unexpected token "\$model", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Property yii\\collection\\GeneratorCollection\:\:\$query with generic class yii\\db\\ActiveQuery does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/GeneratorCollection.php
+
+		-
+			message: '#^Access to an undefined property yii\\collection\\Collection\:\:\$_models\.$#'
+			identifier: property.notFound
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:__construct\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:__construct\(\) has parameter \$models with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:deleteAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:ensureModels\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:fillAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:fillAll\(\) has parameter \$attributes with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:fillAll\(\) has parameter \$safeOnly with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:findWith\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:findWith\(\) has parameter \$with with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:getData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:insertAll\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:queryAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:saveAll\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:saveAll\(\) has parameter \$attributeNames with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:saveAll\(\) has parameter \$runValidation with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:scenario\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:scenario\(\) has parameter \$scenario with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:toArray\(\) has parameter \$expand with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:toArray\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Method yii\\collection\\ModelCollection\:\:updateAll\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^PHPDoc tag @var has invalid value \(\$model Arrayable\)\: Unexpected token "\$model", expected type at offset 9 on line 1$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Parameter \#2 \$models of method yii\\db\\ActiveQuery\<array\|yii\\db\\ActiveRecord\>\:\:findWith\(\) expects array\<yii\\db\\ActiveRecord\>, array\<yii\\db\\BaseActiveRecord\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Property yii\\collection\\ModelCollection\:\:\$query with generic class yii\\db\\ActiveQuery does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/ModelCollection.php
+
+		-
+			message: '#^Cannot assign new offset to yii\\collection\\Collection\.$#'
+			identifier: offsetAssign.dimType
+			count: 1
+			path: tests/CollectionTest.php
+
+		-
+			message: '#^Method yiiunit\\collection\\CollectionTest\:\:getIteratorModels\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/CollectionTest.php
+
+		-
+			message: '#^Parameter \#1 \$collection of method yii\\collection\\Collection\:\:merge\(\) expects array\|yii\\collection\\Collection, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/CollectionTest.php
+
+		-
+			message: '#^Call to an undefined method yii\\collection\\CollectionBehavior\|yii\\db\\ActiveQuery\:\:collect\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: tests/ModelCollectionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''yii\\\\collection\\\\Collection'' and iterable\<yii\\db\\BaseActiveRecord\>&yii\\collection\\ModelCollection will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/ModelCollectionTest.php
+
+		-
+			message: '#^Method yiiunit\\collection\\TestCase\:\:mockApplication\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Static property yii\\BaseYii\<yii\\web\\IdentityInterface\>\:\:\$app \(yii\\console\\Application\|yii\\web\\Application\<yii\\web\\IdentityInterface\>\) does not accept null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: tests/TestCase.php
+
+		-
+			message: '#^Method yiiunit\\collection\\models\\Customer\:\:find\(\) return type with generic class yii\\db\\ActiveQuery does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: tests/models/Customer.php

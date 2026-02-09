@@ -24,4 +24,4 @@ jobs:
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
-      extensions: 'pdo'
+      extensions: pdo, pdo_sqlite

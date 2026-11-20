@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "yiisoft/yii2-coding-standards": "~3.0",
-        "phpunit/phpunit": "^9.6",
+        "phpunit/phpunit": "^13.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0"
     },
